@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👽 ALIEN - Panneau de Contrôle</title>
+    <style>
+        :root {
+            --alien-green: #39ff14;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --border-color: rgba(57, 255, 20, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(57, 255, 20, 0.2);
+        }
+
+        .header h1 {
+            color: var(--alien-green);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px var(--alien-green);
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .control-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(57, 255, 20, 0.3);
+        }
+
+        .card-title {
+            color: var(--alien-green);
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-weight: bold;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 1em;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: var(--alien-green);
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+            font-size: 1em;
+        }
+
+        .btn-primary {
+            background: var(--alien-green);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #2ecc40;
+            transform: scale(1.05);
+        }
+
+        .btn-danger {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #cc3333;
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: #666;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #555;
+            transform: scale(1.05);
+        }
+
+        .status-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--alien-green);
+            margin: 15px 0;
+        }
+
+        .timer-display {
+            font-size: 2em;
+            color: var(--alien-green);
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 0 0 15px var(--alien-green);
+        }
+
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .price-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .logs {
+            background: #000;
+            color: var(--alien-green);
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .control-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👽 ALIEN - Panneau de Contrôle</h1>
+            <p>Contrôlez toutes les promotions et prix de votre site alien</p>
+        </div>
+
+        <div class="control-grid">
+            <!-- Contrôle du Chronomètre -->
+            <div class="control-card">
+                <h3 class="card-title">⏰ Contrôle Chronomètre</h3>
+                
+                <div class="control-group">
+                    <label>Durée de la promotion (minutes)</label>
+                    <input type="number" id="promo-duration" class="control-input" value="5" min="1" max="60">
+                </div>
+
+                <div class="timer-display" id="timer-display">Aucune promotion active</div>
+
+                <div style="text-align: center;">
+                    <button class="btn btn-primary" onclick="startCustomPromo()">🚀 Lancer Promotion</button>
+                    <button class="btn btn-danger" onclick="stopPromo()">⏹️ Arrêter</button>
+                    <button class="btn btn-secondary" onclick="addTime()">⏱️ +1 Min</button>
+                </div>
+
+                <div class="status-display">
+                    <strong>État:</strong> <span id="promo-status">Inactif</span><br>
+                    <strong>Temps restant:</strong> <span id="time-remaining">0m 00s</span>
+                </div>
+            </div>
+
+            <!-- Contrôle des Remises -->
+            <div class="control-card">
+                <h3 class="card-title">💰 Gestion des Remises</h3>
+                
+                <div class="control-group">
+                    <label>Remise promotion (%)</label>
+                    <input type="number" id="promo-discount" class="control-input" value="25" min="0" max="100">
+                </div>
+
+                <div class="control-group">
+                    <label>Remise codes promo (%)</label>
+                    <input type="number" id="code-discount" class="control-input" value="35" min="0" max="100">
+                </div>
+
+                <div class="control-group">
+                    <label>Codes promo valides (séparés par des virgules)</label>
+                    <input type="text" id="promo-codes" class="control-input" value="yaya,nono,nini">
+                </div>
+
+                <button class="btn btn-primary" onclick="updateDiscounts()">💾 Sauvegarder Remises</button>
+            </div>
+
+            <!-- Gestion des Prix -->
+            <div class="control-card">
+                <h3 class="card-title">🏷️ Gestion des Prix</h3>
+                
+                <div class="price-grid">
+                    <div class="price-item">
+                        <label>Maillot Palestine (€)</label>
+                        <input type="number" id="price-palestine" class="control-input" value="2" step="0.01">
+                    </div>
+                    <div class="price-item">
+                        <label>Autres maillots (€)</label>
+                        <input type="number" id="price-others" class="control-input" value="30" step="0.01">
+                    </div>
+                    <div class="price-item">
+                        <label>Livraison domicile (€)</label>
+                        <input type="number" id="shipping-home" class="control-input" value="5.28" step="0.01">
+                    </div>
+                    <div class="price-item">
+                        <label>Livraison express (€)</label>
+                        <input type="number" id="shipping-express" class="control-input" value="7.00" step="0.01">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="updatePrices()">💾 Sauvegarder Prix</button>
+                <button class="btn btn-secondary" onclick="resetPrices()">🔄 Reset Prix</button>
+            </div>
+
+            <!-- Contrôles Avancés -->
+            <div class="control-card">
+                <h3 class="card-title">⚙️ Contrôles Avancés</h3>
+                
+                <button class="btn btn-primary" onclick="syncAllPages()">🔄 Synchroniser toutes les pages</button>
+                <button class="btn btn-secondary" onclick="clearAllData()">🗑️ Vider localStorage</button>
+                <button class="btn btn-secondary" onclick="exportSettings()">📤 Exporter paramètres</button>
+                <button class="btn btn-secondary" onclick="importSettings()">📥 Importer paramètres</button>
+
+                <div class="control-group" style="margin-top: 20px;">
+                    <label>Message promotion personnalisé</label>
+                    <input type="text" id="custom-message" class="control-input" 
+                           value="🎯 Promo spéciale : il reste {time} pour profiter de -{discount}% !">
+                </div>
+            </div>
+        </div>
+
+        <!-- Console de logs -->
+        <div class="control-card">
+            <h3 class="card-title">📊 Console de Logs</h3>
+            <div id="logs" class="logs">
+                [INFO] Panneau de contrôle alien initialisé 👽<br>
+            </div>
+            <button class="btn btn-secondary" onclick="clearLogs()">🗑️ Vider logs</button>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let promoActive = false;
+        let timerInterval;
+        let currentPromoEnd = null;
+
+        // Configuration par défaut
+        const defaultConfig = {
+            promoDuration: 5,
+            promoDiscount: 25,
+            codeDiscount: 35,
+            promoCodes: ['yaya', 'nono', 'nini'],
+            prices: {
+                palestine: 2.00,
+                others: 30.00,
+                shippingHome: 5.28,
+                shippingExpress: 7.00
+            }
+        };
+
+        // Fonction de logging
+        function log(message, type = 'INFO') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logElement = document.getElementById('logs');
+            const colorMap = {
+                'INFO': '#39ff14',
+                'WARN': '#ffaa00',
+                'ERROR': '#ff4444',
+                'SUCCESS': '#00ff88'
+            };
+            
+            logElement.innerHTML += `<span style="color: ${colorMap[type] || '#39ff14'}">[${type}] ${timestamp} - ${message}</span><br>`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        // Démarrer une promotion personnalisée
+        function startCustomPromo() {
+            const duration = parseInt(document.getElementById('promo-duration').value);
+            const durationMs = duration * 60 * 1000;
+            
+            currentPromoEnd = Date.now() + durationMs;
+            localStorage.setItem('promoEnd', currentPromoEnd);
+            promoActive = true;
+            
+            document.getElementById('promo-status').textContent = 'Actif';
+            
+            startTimer();
+            log(`Promotion démarrée pour ${duration} minutes`, 'SUCCESS');
+            
+            // Synchroniser avec toutes les pages
+            syncAllPages();
+        }
+
+        // Arrêter la promotion
+        function stopPromo() {
+            localStorage.removeItem('promoEnd');
+            currentPromoEnd = null;
+            promoActive = false;
+            
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            document.getElementById('promo-status').textContent = 'Inactif';
+            document.getElementById('timer-display').textContent = 'Aucune promotion active';
+            document.getElementById('time-remaining').textContent = '0m 00s';
+            
+            log('Promotion arrêtée', 'WARN');
+            syncAllPages();
+        }
+
+        // Ajouter du temps
+        function addTime() {
+            if (!promoActive) {
+                log('Aucune promotion active pour ajouter du temps', 'WARN');
+                return;
+            }
+            
+            currentPromoEnd += 60 * 1000; // +1 minute
+            localStorage.setItem('promoEnd', currentPromoEnd);
+            log('1 minute ajoutée à la promotion', 'SUCCESS');
+        }
+
+        // Démarrer le timer
+        function startTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            timerInterval = setInterval(() => {
+                if (!currentPromoEnd) return;
+                
+                const now = Date.now();
+                const timeLeft = currentPromoEnd - now;
+                
+                if (timeLeft <= 0) {
+                    stopPromo();
+                    log('Promotion terminée automatiquement', 'INFO');
+                } else {
+                    const minutes = Math.floor(timeLeft / (60 * 1000));
+                    const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
+                    
+                    const timeDisplay = `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+                    document.getElementById('timer-display').textContent = timeDisplay;
+                    document.getElementById('time-remaining').textContent = timeDisplay;
+                }
+            }, 1000);
+        }
+
+        // Mettre à jour les remises
+        function updateDiscounts() {
+            const promoDiscount = document.getElementById('promo-discount').value;
+            const codeDiscount = document.getElementById('code-discount').value;
+            const promoCodes = document.getElementById('promo-codes').value.split(',').map(code => code.trim());
+            
+            localStorage.setItem('promoDiscount', promoDiscount);
+            localStorage.setItem('codeDiscount', codeDiscount);
+            localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
+            
+            log(`Remises mises à jour: Promo ${promoDiscount}%, Codes ${codeDiscount}%`, 'SUCCESS');
+            syncAllPages();
+        }
+
+        // Mettre à jour les prix
+        function updatePrices() {
+            const prices = {
+                palestine: parseFloat(document.getElementById('price-palestine').value),
+                others: parseFloat(document.getElementById('price-others').value),
+                shippingHome: parseFloat(document.getElementById('shipping-home').value),
+                shippingExpress: parseFloat(document.getElementById('shipping-express').value)
+            };
+            
+            localStorage.setItem('alienPrices', JSON.stringify(prices));
+            log('Prix mis à jour et sauvegardés', 'SUCCESS');
+            syncAllPages();
+        }
+
+        // Reset des prix
+        function resetPrices() {
+            document.getElementById('price-palestine').value = defaultConfig.prices.palestine;
+            document.getElementById('price-others').value = defaultConfig.prices.others;
+            document.getElementById('shipping-home').value = defaultConfig.prices.shippingHome;
+            document.getElementById('shipping-express').value = defaultConfig.prices.shippingExpress;
+            
+            updatePrices();
+            log('Prix réinitialisés aux valeurs par défaut', 'INFO');
+        }
+
+        // Synchroniser toutes les pages
+        function syncAllPages() {
+            // Déclencher un événement de storage pour notifier les autres pages
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'alienSync',
+                newValue: Date.now().toString()
+            }));
+            
+            log('Signal de synchronisation envoyé à toutes les pages', 'INFO');
+        }
+
+        // Vider toutes les données
+        function clearAllData() {
+            if (confirm('Êtes-vous sûr de vouloir vider toutes les données ?')) {
+                localStorage.clear();
+                stopPromo();
+                loadSettings();
+                log('Toutes les données ont été effacées', 'WARN');
+            }
+        }
+
+        // Exporter les paramètres
+        function exportSettings() {
+            const settings = {
+                promoDuration: document.getElementById('promo-duration').value,
+                promoDiscount: document.getElementById('promo-discount').value,
+                codeDiscount: document.getElementById('code-discount').value,
+                promoCodes: document.getElementById('promo-codes').value,
+                prices: {
+                    palestine: document.getElementById('price-palestine').value,
+                    others: document.getElementById('price-others').value,
+                    shippingHome: document.getElementById('shipping-home').value,
+                    shippingExpress: document.getElementById('shipping-express').value
+                }
+            };
+            
+            const dataStr = JSON.stringify(settings, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'alien-settings.json';
+            link.click();
+            
+            log('Paramètres exportés', 'SUCCESS');
+        }
+
+        // Importer les paramètres
+        function importSettings() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const settings = JSON.parse(e.target.result);
+                        
+                        document.getElementById('promo-duration').value = settings.promoDuration || 5;
+                        document.getElementById('promo-discount').value = settings.promoDiscount || 25;
+                        document.getElementById('code-discount').value = settings.codeDiscount || 35;
+                        document.getElementById('promo-codes').value = settings.promoCodes || 'yaya,nono,nini';
+                        
+                        if (settings.prices) {
+                            document.getElementById('price-palestine').value = settings.prices.palestine || 2;
+                            document.getElementById('price-others').value = settings.prices.others || 30;
+                            document.getElementById('shipping-home').value = settings.prices.shippingHome || 5.28;
+                            document.getElementById('shipping-express').value = settings.prices.shippingExpress || 7.00;
+                        }
+                        
+                        log('Paramètres importés avec succès', 'SUCCESS');
+                    } catch (error) {
+                        log('Erreur lors de l\'importation: ' + error.message, 'ERROR');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        // Vider les logs
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '[INFO] Logs vidés<br>';
+        }
+
+        // Charger les paramètres au démarrage
+        function loadSettings() {
+            // Charger les remises
+            const promoDiscount = localStorage.getItem('promoDiscount') || '25';
+            const codeDiscount = localStorage.getItem('codeDiscount') || '35';
+            const promoCodes = JSON.parse(localStorage.getItem('promoCodes') || '["yaya","nono","nini"]');
+            
+            document.getElementById('promo-discount').value = promoDiscount;
+            document.getElementById('code-discount').value = codeDiscount;
+            document.getElementById('promo-codes').value = promoCodes.join(',');
+            
+            // Charger les prix
+            const savedPrices = JSON.parse(localStorage.getItem('alienPrices') || '{}');
+            document.getElementById('price-palestine').value = savedPrices.palestine || 2;
+            document.getElementById('price-others').value = savedPrices.others || 30;
+            document.getElementById('shipping-home').value = savedPrices.shippingHome || 5.28;
+            document.getElementById('shipping-express').value = savedPrices.shippingExpress || 7.00;
+            
+            // Vérifier si une promotion est en cours
+            const promoEnd = localStorage.getItem('promoEnd');
+            if (promoEnd && Date.now() < promoEnd) {
+                currentPromoEnd = parseInt(promoEnd);
+                promoActive = true;
+                document.getElementById('promo-status').textContent = 'Actif';
+                startTimer();
+                log('Promotion en cours détectée', 'INFO');
+            }
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            log('Panneau de contrôle alien initialisé 👽', 'SUCCESS');
+        });
+
+        // Nettoyage
+        window.addEventListener('beforeunload', function() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+        });
+    </script>
+</body>
+</html>
